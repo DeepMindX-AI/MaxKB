@@ -14,9 +14,9 @@ from dataset.models.data_set import Document, Paragraph, DataSet
 
 class SourceType(models.TextChoices):
     """订单类型"""
-    PROBLEM = 0, '问题'
-    PARAGRAPH = 1, '段落'
-    TITLE = 2, '标题'
+    PROBLEM = "0", '问题'
+    PARAGRAPH = "1", '段落'
+    TITLE = "2", '标题'
 
 
 class Embedding(models.Model):

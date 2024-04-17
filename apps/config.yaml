@@ -1,0 +1,21 @@
+database:
+  host: localhost
+  user: myuser
+  password: mypassword
+  database_name: mydb
+  port: 5432
+
+redis:
+  host: localhost
+  port: 6379
+  password: myredispassword
+
+mail:
+  smtp_server: smtp.example.com
+  smtp_port: 587
+  smtp_user: mailuser
+  smtp_password: mailpassword
+
+api:
+  api_key: myapikey
+  base_url: https://api.example.com

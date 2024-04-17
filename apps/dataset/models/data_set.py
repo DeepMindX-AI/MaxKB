@@ -16,15 +16,15 @@ from users.models import User
 
 class Status(models.TextChoices):
     """订单类型"""
-    embedding = 0, '导入中'
-    success = 1, '已完成'
-    error = 2, '导入失败'
+    embedding = "0", '导入中'
+    success = "1", '已完成'
+    error = "2", '导入失败'
 
 
 class Type(models.TextChoices):
-    base = 0, '通用类型'
+    base = "0", '通用类型'
 
-    web = 1, 'web站点类型'
+    web = "1", 'web站点类型'
 
 
 class DataSet(AppModelMixin):

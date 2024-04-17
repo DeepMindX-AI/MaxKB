@@ -178,6 +178,7 @@ class ConfigManager:
             if not os.path.isfile(os.path.join(self.root_path, i)):
                 continue
             loaded = self.from_yaml(i)
+            logging.getLogger('smartdoc.conf').info(f"load config from ${os.path.join(self.root_path, i)}")
             if loaded:
                 return True
 
