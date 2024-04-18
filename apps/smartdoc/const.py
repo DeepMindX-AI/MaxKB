@@ -11,4 +11,3 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 VERSION = '1.0.0'
 CONFIG = ConfigManager.load_user_config(root_path=PROJECT_DIR)
-logging.getLogger('smartdoc.conf').info(f"base dir: ${BASE_DIR}, project dir: {PROJECT_DIR}")

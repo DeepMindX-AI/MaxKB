@@ -42,6 +42,7 @@ class AppSQLCompiler(SQLCompiler):
                 )
             else:
                 distinct_fields, distinct_params = self.get_distinct()
+                print(f"Debug: distinct_fields: {distinct_fields}, distinct_params: {distinct_params}")
                 try:
                     where, w_params = (
                         self.compile(self.where) if self.where is not None else ("", [])

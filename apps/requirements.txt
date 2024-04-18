@@ -19,6 +19,6 @@ psycopg2
 html2text
 python-docx
 PyMuPDF
-langchain-openai
+langchain-openai<0.2.0
 pycryptodome
 xlwt

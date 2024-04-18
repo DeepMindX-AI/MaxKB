@@ -1,9 +1,9 @@
 # coding=utf-8
 """
-    @project: maxkb
-    @Author：虎
+    @project: AiFun
+    @Author：JackyFan
     @file： authentication_type.py
-    @date：2023/11/14 20:03
+    @date：2024/04/18
     @desc:
 """
 from enum import Enum

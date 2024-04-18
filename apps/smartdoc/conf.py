@@ -17,7 +17,7 @@ import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
-logger = logging.getLogger('smartdoc.conf')
+logger = logging.getLogger('max_kb')
 
 
 def import_string(dotted_path):
@@ -80,6 +80,7 @@ class Config(dict):
         "DB_USER": "",
         "DB_PASSWORD": "",
         "DB_ENGINE": "django.db.backends.postgresql_psycopg2",
+
         # 邮件相关配置
         "EMAIL_ADDRESS": "",
         "EMAIL_USE_TLS": False,
@@ -88,13 +89,21 @@ class Config(dict):
         "EMAIL_PORT": 465,
         "EMAIL_HOST_USER": "",
         "EMAIL_HOST_PASSWORD": "",
+
         # 向量模型
+        "EMBEDDING_MODEL_ONLINE": "false",
         "EMBEDDING_MODEL_NAME": "shibing624/text2vec-base-chinese",
         "EMBEDDING_DEVICE": "cpu",
         "EMBEDDING_MODEL_PATH": os.path.join(PROJECT_DIR, 'models'),
-        # 向量库配置
-        "VECTOR_STORE_NAME": 'pg_vector'
+        # 项目配置
+        "DEBUG": "true",
 
+        # 向量库配置
+        "VECTOR_STORE_NAME": 'pg_vector',
+
+        # openai
+        "OPENAI_BASE_URL": "",
+        "OPENAI_API_KEY": "",
     }
 
     def get_debug(self) -> bool:
@@ -111,6 +120,12 @@ class Config(dict):
             "USER": self.get('DB_USER'),
             "PASSWORD": self.get('DB_PASSWORD'),
             "ENGINE": self.get('DB_ENGINE')
+        }
+
+    def get_openai_setting(self) -> dict:
+        return {
+            "BASE_URL": self.get('OPENAI_BASE_URL'),
+            "API_KEY": self.get('OPENAI_API_KEY'),
         }
 
     def __init__(self, *args):
@@ -158,31 +173,19 @@ class ConfigManager:
                     self.config[key] = value
         return True
 
-    def from_yaml(self, filename, silent=False):
-        if self.root_path:
-            filename = os.path.join(self.root_path, filename)
-        try:
-            with open(filename, 'rt', encoding='utf8') as f:
-                obj = yaml.safe_load(f)
-        except IOError as e:
-            if silent and e.errno in (errno.ENOENT, errno.EISDIR):
-                return False
-            e.strerror = 'Unable to load configuration file (%s)' % e.strerror
-            raise
-        if obj:
-            return self.from_mapping(obj)
-        return True
-
     def load_from_yml(self):
-        for i in ['config_example.yml', 'config.yaml', 'config.yml']:
-            if not os.path.isfile(os.path.join(self.root_path, i)):
-                continue
-            loaded = self.from_yaml(i)
-            logging.getLogger('smartdoc.conf').info(f"load config from ${os.path.join(self.root_path, i)}")
-            if loaded:
-                return True
-
-        return False
+        yaml_path = os.path.join(PROJECT_DIR, 'config.yaml')
+        try:
+            if not os.path.isfile(yaml_path):
+                raise FileNotFoundError(f"No such file: '{yaml_path}'")
+            with open(yaml_path, 'r') as file:
+                obj = yaml.safe_load(file)
+            if not isinstance(obj, dict):
+                raise ValueError("YAML content is invalid or not a dictionary")
+            return self.from_mapping(obj)
+        except (FileNotFoundError, IOError, yaml.YAMLError, ValueError) as e:
+            # Handle specific errors related to file I/O and YAML parsing
+            raise RuntimeError(f"Configuration load failed: {e}") from e
 
     @classmethod
     def load_user_config(cls, root_path=None, config_class=None):
@@ -202,4 +205,6 @@ class ConfigManager:
 
             """
             raise ImportError(msg)
+        print(f"load config from {root_path}/config.yml, config content:{config}")
+        logger.info(f"load config from ${root_path}/config.yml, config content:${config}")
         return config

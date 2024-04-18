@@ -1,9 +1,9 @@
 # coding=utf-8
 """
-    @project: qabot
-    @Author：虎
+    @project: AIFun
+    @Author：JackyFan
     @file： authenticate.py
-    @date：2024/3/14 03:02
+    @date：2024/4/18
     @desc:  应用api key认证
 """
 from django.db.models import QuerySet

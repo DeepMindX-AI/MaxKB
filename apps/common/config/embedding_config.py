@@ -6,8 +6,6 @@
     @date：2023/10/23 16:03
     @desc:
 """
-from langchain_community.embeddings import HuggingFaceEmbeddings
-
 from smartdoc.const import CONFIG
 
 
@@ -21,14 +19,23 @@ class EmbeddingModel:
         :return:
         """
         if EmbeddingModel.instance is None:
-            model_name = CONFIG.get('EMBEDDING_MODEL_NAME')
-            cache_folder = CONFIG.get('EMBEDDING_MODEL_PATH')
-            device = CONFIG.get('EMBEDDING_DEVICE')
-            e = HuggingFaceEmbeddings(
-                model_name=model_name,
-                cache_folder=cache_folder,
-                model_kwargs={'device': device})
-            EmbeddingModel.instance = e
+            online = CONFIG.get("EMBEDDING_MODEL_ONLINE")
+            if not online:
+                model_name = CONFIG.get("EMBEDDING_MODEL_NAME")
+                cache_folder = CONFIG.get("EMBEDDING_MODEL_PATH")
+                device = CONFIG.get("EMBEDDING_DEVICE")
+                from langchain_community.embeddings import HuggingFaceEmbeddings
+                EmbeddingModel.instance = HuggingFaceEmbeddings(
+                    model_name=model_name,
+                    cache_folder=cache_folder,
+                    model_kwargs={'device': device})
+            else:
+                api_base = CONFIG.get("OPENAI_BASE_URL")
+                api_key = CONFIG.get("OPENAI_API_KEY")
+                from langchain_community.embeddings import OpenAIEmbeddings
+                EmbeddingModel.instance = OpenAIEmbeddings(
+                    openai_api_base=api_base,
+                    openai_api_key=api_key)
         return EmbeddingModel.instance
 
 

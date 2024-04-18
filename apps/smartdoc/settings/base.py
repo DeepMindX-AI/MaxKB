@@ -87,6 +87,7 @@ SWAGGER_SETTINGS = {
 }
 
 #  缓存配置
+# TODO(JackyFan): use redis
 CACHES = {
     "default": {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
