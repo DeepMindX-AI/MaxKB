@@ -32,6 +32,7 @@ class BaseGenerateHumanMessageStep(IGenerateHumanMessageStep):
         history_message = [[history_chat_record[index].get_human_message(), history_chat_record[index].get_ai_message()]
                            for index in
                            range(start_index if start_index > 0 else 0, len(history_chat_record))]
+        print("Debug GenerateHumanMessageStep history_message: ", history_message)
         return [*flat_map(history_message),
                 self.to_human_message(prompt, exec_problem_text, max_paragraph_char_number, paragraph_list)]
 

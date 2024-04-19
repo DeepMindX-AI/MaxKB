@@ -22,3 +22,7 @@ PyMuPDF
 langchain-openai<0.2.0
 pycryptodome
 xlwt
+celery>=5.4.0
+eventlet
+django-celery-beat
+django-celery-results

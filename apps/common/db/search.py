@@ -7,7 +7,7 @@
     @desc:
 """
 from typing import Dict, Any
-
+import django
 from django.db import DEFAULT_DB_ALIAS, models, connections
 from django.db.models import QuerySet
 
@@ -83,7 +83,12 @@ def compiler_queryset(queryset: QuerySet, field_replace_dict: None | Dict[str, s
         field_replace_dict = get_field_replace_dict(queryset)
     app_sql_compiler = AppSQLCompiler(q, using=DEFAULT_DB_ALIAS, connection=compiler.connection,
                                       field_replace_dict=field_replace_dict)
-    sql, params = app_sql_compiler.get_query_str(with_table_name=with_table_name)
+    try:
+        sql, params = app_sql_compiler.get_query_str(with_table_name=with_table_name)
+        print(f"Debug sql: {sql}, params: {params}")
+    except django.core.exceptions.FullResultSet:
+        sql, params = "", []
+        print(f"Debug django.core.exceptions.FullResultSet")
     return sql, params
 
 

@@ -18,6 +18,7 @@ from common.db.search import native_search
 from common.util.file_util import get_file_content
 from dataset.models import Paragraph
 from smartdoc.conf import PROJECT_DIR
+from smartdoc.const import CONFIG
 
 
 class BaseSearchDatasetStep(ISearchDatasetStep):
@@ -31,10 +32,13 @@ class BaseSearchDatasetStep(ISearchDatasetStep):
         vector = VectorStore.get_embedding_vector()
         embedding_list = vector.query(embedding_value, dataset_id_list, exclude_document_id_list,
                                       exclude_paragraph_id_list, True, top_n, similarity)
+        print(f"Debug SearchDatasetStep embedding_query: {exec_problem_text}, top_n:{top_n}, similarity: {similarity}")
         if embedding_list is None:
+            print(f"Debug SearchDatasetStep embedding_list is None")
             return []
         paragraph_list = self.list_paragraph([row.get('paragraph_id') for row in embedding_list], vector)
-        return [self.reset_paragraph(paragraph, embedding_list) for paragraph in paragraph_list]
+        print(f"Debug SearchDatasetStep paragraph_list: {paragraph_list}")
+        return list(reversed([self.reset_paragraph(paragraph, embedding_list) for paragraph in paragraph_list]))
 
     @staticmethod
     def reset_paragraph(paragraph: Dict, embedding_list: List) -> ParagraphPipelineModel:
@@ -69,14 +73,17 @@ class BaseSearchDatasetStep(ISearchDatasetStep):
 
     def get_details(self, manage, **kwargs):
         step_args = self.context['step_args']
-
+        if CONFIG["EMBEDDING_MODEL_ONLINE"]:
+            model_name = "text_ada2_embedding"
+        else:
+            model_name = EmbeddingModel.get_embedding_model().model_name
         return {
             'step_type': 'search_step',
             'paragraph_list': [row.to_dict() for row in self.context['paragraph_list']],
             'run_time': self.context['run_time'],
             'problem_text': step_args.get(
                 'padding_problem_text') if 'padding_problem_text' in step_args else step_args.get('problem_text'),
-            'model_name': EmbeddingModel.get_embedding_model().model_name,
+            'model_name': model_name,
             'message_tokens': 0,
             'answer_tokens': 0,
             'cost': 0

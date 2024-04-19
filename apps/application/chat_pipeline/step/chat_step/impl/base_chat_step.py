@@ -89,6 +89,7 @@ class BaseChatStep(IChatStep):
                 stream: bool = True,
                 client_id=None, client_type=None,
                 **kwargs):
+        print(f"Debug BaseChatStep execute:{message_list}")
         if stream:
             return self.execute_stream(message_list, chat_id, problem_text, post_response_handler, chat_model,
                                        paragraph_list,
@@ -159,6 +160,7 @@ class BaseChatStep(IChatStep):
             chat_result = AIMessage(
                 content="\n\n".join([paragraph.title + "\n" + paragraph.content for paragraph in paragraph_list]))
         else:
+            #TODO(JackyFan): we must control message_list length less than max_tokens
             chat_result = chat_model.invoke(message_list)
         chat_record_id = uuid.uuid1()
         request_token = chat_model.get_num_tokens_from_messages(message_list)
