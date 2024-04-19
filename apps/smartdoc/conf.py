@@ -95,8 +95,11 @@ class Config(dict):
         "EMBEDDING_MODEL_NAME": "shibing624/text2vec-base-chinese",
         "EMBEDDING_DEVICE": "cpu",
         "EMBEDDING_MODEL_PATH": os.path.join(PROJECT_DIR, 'models'),
+
         # 项目配置
-        "DEBUG": "true",
+        "DEBUG": False,
+
+        "TIME_ZONE": "Asia/Shanghai",
 
         # 向量库配置
         "VECTOR_STORE_NAME": 'pg_vector',
@@ -104,6 +107,13 @@ class Config(dict):
         # openai
         "OPENAI_BASE_URL": "",
         "OPENAI_API_KEY": "",
+        "OPENAI_MAX_TOKEN": 4096,
+
+        # rag
+        "RAG_SIMILARITY": 0.7,
+        "RAG_TOP_K": 10,
+        "RAG_FUSION": True,
+
     }
 
     def get_debug(self) -> bool:

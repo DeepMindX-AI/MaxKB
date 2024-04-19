@@ -1,0 +1,33 @@
+# 邮箱配置
+EMAIL_ADDRESS:
+EMAIL_USE_TLS: False
+EMAIL_USE_SSL: True
+EMAIL_HOST: smtp.qq.com
+EMAIL_PORT: 465
+EMAIL_HOST_USER:
+EMAIL_HOST_PASSWORD:
+
+# 数据库链接信息
+DB_NAME: maxkb
+DB_HOST: localhost
+DB_PORT: 5432
+DB_USER: root
+DB_PASSWORD: xxxx
+DB_ENGINE: django.db.backends.postgresql_psycopg2
+
+EMBEDDING_MODEL_ONLINE: true
+EMBEDDING_MODEL_PATH: /opt/maxkb/model/embedding
+EMBEDDING_MODEL_NAME: /opt/maxkb/model/embedding/shibing624_text2vec-base-chinese
+EMBEDDING_DEVICE: cpu
+
+DEBUG: true
+
+TIME_ZONE: Asia/Shanghai
+
+# OpenAI API
+OPENAI_BASE_URL: https://api.openai.com/v1
+OPENAI_API_KEY: sk-ABCdefghijklmnopqrstquWXYZ
+
+# RAG
+RAG_SIMILARITY: 0.7
+RAG_TOP_K: 10
