@@ -26,3 +26,4 @@ celery>=5.4.0
 eventlet
 django-celery-beat
 django-celery-results
+qianfan
